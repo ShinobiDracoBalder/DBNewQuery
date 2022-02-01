@@ -92,6 +92,28 @@ namespace DBNewQuery.Api.Application.Repositories
             }
         }
 
+        public async Task<List<Product>> GetByNameAsync(string name)
+        {
+            var sql = "SELECT * FROM [dbo].[Products] WHERE EspecialidadNombre = @EspecialidadNombre";
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DapperConnection")))
+            {
+                try
+                {
+                    connection.Open();
+                    var result = await connection.QueryAsync<Product>(sql, new { EspecialidadNombre = name });
+                    return result.ToList();
+                }
+                catch (System.Exception)
+                {
+                    return null;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
         /// <summary>
         /// This method updates a product specified by an ID. Added column won't be touched.
         /// </summary>

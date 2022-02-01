@@ -1,13 +1,13 @@
 ﻿using DBNewQuery.Api.Application.Interfaces;
 using DBNewQuery.Api.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace DBNewQuery.Api.Controllers
 {
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [Route("api/[controller]")]
     public class ProductController : Controller
     {
@@ -25,7 +25,7 @@ namespace DBNewQuery.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var data = await _unitOfWork.Products.GetAllAsync();
+            IReadOnlyList<Product> data = await _unitOfWork.Products.GetAllAsync();
             return Ok(data);
         }
         /// <summary>
@@ -36,8 +36,12 @@ namespace DBNewQuery.Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var data = await _unitOfWork.Products.GetByIdAsync(id);
-            if (data == null) return Ok();
+            Product data = await _unitOfWork.Products.GetByIdAsync(id);
+            if (data == null)
+            {
+                return Ok();
+            }
+
             return Ok(data);
         }
         /// <summary>
@@ -48,7 +52,7 @@ namespace DBNewQuery.Api.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(Product product)
         {
-            var data = await _unitOfWork.Products.AddAsync(product);
+            int data = await _unitOfWork.Products.AddAsync(product);
             return Ok(data);
         }
         /// <summary>
@@ -59,7 +63,7 @@ namespace DBNewQuery.Api.Controllers
         [HttpDelete]
         public async Task<IActionResult> Delete(int id)
         {
-            var data = await _unitOfWork.Products.DeleteAsync(id);
+            int data = await _unitOfWork.Products.DeleteAsync(id);
             return Ok(data);
         }
         /// <summary>
@@ -70,7 +74,7 @@ namespace DBNewQuery.Api.Controllers
         [HttpPut]
         public async Task<IActionResult> Update(Product product)
         {
-            var data = await _unitOfWork.Products.UpdateAsync(product);
+            int data = await _unitOfWork.Products.UpdateAsync(product);
             return Ok(data);
         }
     }

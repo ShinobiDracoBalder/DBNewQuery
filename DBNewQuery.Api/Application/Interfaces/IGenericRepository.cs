@@ -10,5 +10,6 @@ namespace DBNewQuery.Api.Application.Interfaces
         Task<int> AddAsync(T entity);
         Task<int> UpdateAsync(T entity);
         Task<int> DeleteAsync(int id);
+        Task<List<T>> GetByNameAsync(string name);
     }
 }

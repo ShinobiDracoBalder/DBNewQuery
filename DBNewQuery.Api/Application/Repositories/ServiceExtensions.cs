@@ -9,6 +9,7 @@ namespace DBNewQuery.Api.Application.Repositories
         {
             service.AddTransient<IUnitOfWork, UnitOfWork>();
             service.AddTransient<IProductRepository, ProductRepository>();
+            service.AddTransient<IEspecialidadRepository, EspecialidadRepository>();
         }
     }
 }
