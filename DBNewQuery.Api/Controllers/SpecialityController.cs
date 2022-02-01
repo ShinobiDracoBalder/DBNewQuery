@@ -81,6 +81,9 @@ namespace DBNewQuery.Api.Controllers
         /// <param name="id"></param>
         /// <returns>Status for deletion</returns>
         [HttpDelete]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Delete(int id)
         {
             int data = await _unitOfWork.Speciality.DeleteAsync(id);
@@ -100,6 +103,9 @@ namespace DBNewQuery.Api.Controllers
         /// <param name="product"></param>
         /// <returns>Status for update</returns>
         [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> Update(Especialidad especialidad)
         {
             int data = await _unitOfWork.Speciality.UpdateAsync(especialidad);
@@ -116,6 +122,9 @@ namespace DBNewQuery.Api.Controllers
         }
 
         [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [Route("GetUSPEspecialidad")]
         public async Task<IActionResult> GetUSPEspecialidad()
         {
@@ -126,6 +135,46 @@ namespace DBNewQuery.Api.Controllers
                 {
                     IsSuccess = false,
                     Message = "Specialities Doesnt Exists"
+                });
+            }
+
+            return Ok(data);
+        }
+
+        [HttpPut]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("UpdateEspecialidad")]
+        public async Task<IActionResult> UpdateEspecialidad(Especialidad model)
+        {
+            Response data = await _unitOfWork.Speciality.UpdateEspecialidadAsync(model);
+            if (!data.IsSuccess)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = data.Message,
+                });
+            }
+
+            return Ok(data);
+        }
+
+        [HttpPost]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [Route("InsertEspecialidad")]
+        public async Task<IActionResult> InsertEspecialidad(Especialidad model)
+        {
+            Response data = await _unitOfWork.Speciality.InsertEspecialidadAsync(model);
+            if (!data.IsSuccess)
+            {
+                return BadRequest(new Response
+                {
+                    IsSuccess = false,
+                    Message = data.Message,
                 });
             }
 

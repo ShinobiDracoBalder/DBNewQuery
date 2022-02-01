@@ -3,6 +3,7 @@ using DBNewQuery.Api.Application.Interfaces;
 using DBNewQuery.Common.Models;
 using Microsoft.Extensions.Configuration;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
@@ -131,7 +132,6 @@ namespace DBNewQuery.Api.Application.Repositories
                 }
             }
         }
-
         public async Task<List<Especialidad>> GetEspecialidadesAsync()
         {
             using (var connection = new SqlConnection(_configuration.GetConnectionString("DapperConnection")))
@@ -146,6 +146,47 @@ namespace DBNewQuery.Api.Application.Repositories
                 catch (System.Exception)
                 {
                     return null;
+                }
+                finally
+                {
+                    connection.Close();
+                }
+            }
+        }
+
+        public async Task<Response> InsertEspecialidadAsync(Especialidad objEsp)
+        {
+            var sql = "[dbo].[usp_insertEspecialidad]";
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DapperConnection")))
+            {
+                try
+                {
+                    var objInsert = await GetByNameAsync(objEsp.EspecialidadNombre);
+                    if (objInsert.Count > 0)
+                    {
+                        return new Response
+                        {
+                            IsSuccess = false,
+                            Message = "Doesnt Register Exit!",
+                        };
+                    }
+                    DynamicParameters param = new DynamicParameters();
+                    param.Add("@EspecialidadNombre", objEsp.EspecialidadNombre);
+                    connection.Open();
+                    var result = await connection.ExecuteAsync(sql, param, commandType: CommandType.StoredProcedure);
+                    return new Response
+                    {
+                        IsSuccess = true,
+                        Message = "The record was successfully Insert"
+                    };
+                }
+                catch (System.Exception exception)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = exception.Message,
+                    };
                 }
                 finally
                 {
@@ -176,6 +217,43 @@ namespace DBNewQuery.Api.Application.Repositories
                     return 0;
                 }
                 finally {
+                    connection.Close();
+                }
+            }
+        }
+        public async Task<Response> UpdateEspecialidadAsync(Especialidad entity)
+        {
+            var sql = "[dbo].[usp_updateEspecialidad]";
+            using (var connection = new SqlConnection(_configuration.GetConnectionString("DapperConnection")))
+            {
+                try
+                {
+                    var objUpdate = await GetByIdAsync(entity.EspecialidadId);
+                    if (objUpdate == null)
+                    {
+                        return new Response {
+                            IsSuccess = false,
+                            Message ="Doesnt Register Exit!",
+                        };
+                    }
+                    connection.Open();
+                    objUpdate.EspecialidadNombre = entity.EspecialidadNombre ?? objUpdate.EspecialidadNombre;
+                    var result = await connection.ExecuteAsync(sql, objUpdate, commandType: CommandType.StoredProcedure);
+                    return new Response {
+                        IsSuccess = true,
+                        Message = "The record was successfully updated"
+                    };
+                }
+                catch (System.Exception exception)
+                {
+                    return new Response
+                    {
+                        IsSuccess = false,
+                        Message = exception.Message,
+                    };
+                }
+                finally
+                {
                     connection.Close();
                 }
             }
