@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.32106.194
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBNewQuery.Api", "DBNewQuery.Api\DBNewQuery.Api.csproj", "{04D83272-8C1F-44F4-91EE-826E3FB5978F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBNewQuery.Api", "DBNewQuery.Api\DBNewQuery.Api.csproj", "{04D83272-8C1F-44F4-91EE-826E3FB5978F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBNewQuery.Common", "DBNewQuery.Common\DBNewQuery.Common.csproj", "{C363B6BD-07D8-4A86-B12F-85293D6B57E7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DBNewQuery.Common", "DBNewQuery.Common\DBNewQuery.Common.csproj", "{C363B6BD-07D8-4A86-B12F-85293D6B57E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PartialViewCrudDemo", "PartialViewCrudDemo\PartialViewCrudDemo.csproj", "{BC1F47A6-F9BE-4C69-84F9-2DC7742AEA1F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C363B6BD-07D8-4A86-B12F-85293D6B57E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C363B6BD-07D8-4A86-B12F-85293D6B57E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C363B6BD-07D8-4A86-B12F-85293D6B57E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BC1F47A6-F9BE-4C69-84F9-2DC7742AEA1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BC1F47A6-F9BE-4C69-84F9-2DC7742AEA1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BC1F47A6-F9BE-4C69-84F9-2DC7742AEA1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BC1F47A6-F9BE-4C69-84F9-2DC7742AEA1F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

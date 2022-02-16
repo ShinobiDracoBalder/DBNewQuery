@@ -1,0 +1,197 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Teacher Record</h2>
+@* Table for showing the list of teachers from the database *@
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="OpenAddPopup();">Add New Teacher</button>
+<br />
+<br />
+<table class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>
+                ID
+            </th>
+            <th>
+                EspecialidadNombre
+            </th>
+            <th>
+                Action
+            </th>
+        </tr>
+    </thead>
+    <tbody class="tbody"></tbody>
+</table>
+<div id="divcontent">
+
+</div>
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @*<script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>*@
+<script type="text/javascript">
+        $(document).ready(function () {
+            BindSpecialityData();
+        });
+        function BindSpecialityData() {
+            $.ajax({
+                url: "/Speciality/GetAllSpecialitys",
+                type: "GET",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    if (result) {
+                        //itetrate thorugh each record and bind it to td
+                        var html = '';
+                        $.each(result, function (key, item) {
+                            html += '<tr>';
+                            html += '<td>' + item.EspecialidadId + '</td>';
+                            html += '<td>' + item.EspecialidadNombre + '</td>';
+                            html += '<td><a href="#" onclick="return OpenUpdatePopup(' + item.EspecialidadId + ')">Edit</a> | <a href="#" onclick="DeleleSpeciality(' + item.EspecialidadId + ')">Delete</a></td>';
+                            html += '</tr>';
+                        });
+                        $('.tbody').html(html);
+                    }
+
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+        function OpenAddPopup() {
+            $.ajax({
+                url: '/Speciality/LoadaddSpecialityPopup',
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) {
+                    $('#divcontent').empty();
+                    $('#divcontent').html(result);
+                    $('#AddUpdateModelPopup').modal('show');
+                },
+                error: function (xhr, status) {
+                    alert(status);
+                }
+            })
+        }
+
+        function OpenUpdatePopup(Id) {
+            $.ajax({
+                url: '/Speciality/LoadEditSpecialityPopup?TeacherId=' + Id,
+                contentType: 'application/html; charset=utf-8',
+                type: 'GET',
+                dataType: 'html',
+                success: function (result) {
+                    $('#divcontent').empty();
+                    $('#divcontent').html(result);
+                    $('#AddUpdateModelPopup').modal('show');
+                    //$('#btndivuserguidemodel').trigger('click');
+                },
+                error: function (xhr, status) {
+                    alert(status);
+                }
+            })
+        }
+
+
+        //Add Data Function
+        function AddSpeciality() {
+            var res = ValidateForm();
+            if (res == false) {
+                return false;
+            }
+            var jsonObj = {
+                "EspecialidadId": $('#EspecialidadId').val(),
+                "EspecialidadNombre": $('#EspecialidadNombre').val(),
+            };
+           
+            console.log(jsonObj.EspecialidadId);
+            console.log(jsonObj.EspecialidadNombre);
+            const arrObj = [$('#EspecialidadId').val(), $('#EspecialidadNombre').val()];
+            $.ajax({
+                //url: '/Speciality/AddSpeciality/',
+                url: "@Url.Action("AddSpeciality", "Speciality")",
+                type: 'POST',
+                //contentType: 'application/json',
+                data: JSON.stringify(jsonObj),
+                //data: JSON.stringify({ Especialidad: specialidadObj }),
+                //data: { model: JSON.stringify(jsonObj)},
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    //populate table with new record
+                    BindSpecialityData();
+                    $('#AddUpdateModelPopup').modal('hide');
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+        //function for updating Patient record
+        function UpdateSpeciality() {
+            var res = ValidateForm();
+            if (res == false) {
+                return false;
+            }
+            var TeacherObj = {
+                EspecialidadId: $('#EspecialidadId').val(),
+                EspecialidadNombre: $('#EspecialidadNombre').val(),
+            };
+            if (!TeacherObj.EspecialidadId || TeacherObj.EspecialidadId <= 0) {
+                alert("Invalid Id!");
+                return false;
+            }
+            $.ajax({
+                url: "/Speciality/UpdateSpeciality",
+                data: JSON.stringify(TeacherObj),
+                type: "POST",
+                contentType: "application/json;charset=utf-8",
+                dataType: "json",
+                success: function (result) {
+                    BindSpecialityData();
+                    $('#AddUpdateModelPopup').modal('hide');
+                },
+                error: function (errormessage) {
+                    alert(errormessage.responseText);
+                }
+            });
+        }
+
+
+        //function for deleting Teacher's record
+        function DeleleSpeciality(ID) {
+            var ans = confirm("Are you sure you want to delete?");
+            if (ans) {
+                $.ajax({
+                    url: "/Speciality/DeleteSpeciality?TeacherId=" + ID,
+                    type: "POST",
+                    contentType: "application/json;charset=UTF-8",
+                    dataType: "json",
+                    success: function (result) {
+                        BindSpecialityData();
+                    },
+                    error: function (errormessage) {
+                        alert(errormessage.responseText);
+                    }
+                });
+            }
+        }
+
+        function ValidateForm() {
+            var isValid = true;
+            if ($('#EspecialidadNombre').val().trim() == "") {
+                $('#EspecialidadNombre').css('border-color', 'Red');
+                isValid = false;
+            }
+            else {
+                $('#EspecialidadNombre').css('border-color', 'lightgrey');
+            }
+
+            return isValid;
+        }
+</script>
+}

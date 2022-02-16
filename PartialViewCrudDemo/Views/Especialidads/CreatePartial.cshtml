@@ -1,0 +1,50 @@
+﻿@model DBNewQuery.Common.Models.Especialidad
+@*<html>
+    <head>
+        <meta name="viewport" content="width=device-width" />
+        <title>Create</title>
+    </head>
+    <body>*@
+@*@using (Html.BeginForm())
+    {
+        @Html.ValidationSummary(true)
+
+        <h3>Add Employee</h3>
+
+        <div class="editor-label">
+            @Html.LabelFor(model => model.EspecialidadNombre)
+        </div>
+        <div class="editor-field">
+            @Html.TextBoxFor(model => model.EspecialidadNombre, new { @class = "form-control" })
+            @Html.ValidationMessageFor(model => model.EspecialidadNombre)
+        </div>
+
+        <p>
+            <input type="submit" value="Save" class="btn btn-primary" onclick="AddData();" />
+        </p>
+    }*@
+
+<h2>Register</h2>
+
+<h4>Create</h4>
+<hr />
+
+<div class="row">
+    <div class="col-md-12">
+        <form asp-action="MyCreatePartial" asp-controller="Especialidads" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="EspecialidadNombre" class="control-label"></label>
+                <input asp-for="EspecialidadNombre" class="form-control" placeholder="Especialidad Nombre" required />
+                <span asp-validation-for="EspecialidadNombre" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-outline-primary" />
+                @*<input type="submit" value="Create" class="btn btn-outline-primary" onclick="AddData();" />*@
+            </div>
+        </form>
+    </div>
+
+</div>
+@*</body>
+    </html>*@
